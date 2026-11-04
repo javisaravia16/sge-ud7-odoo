@@ -1,12 +1,12 @@
-# SGE · UD7 · Odoo
+# SGE UD7 Odoo
 
-Práctica de la Unidad 7 de Sistemas de Gestión Empresarial: poner en marcha Odoo para una empresa inventada, crear sus usuarios con sus permisos y hacer una venta completa, desde el presupuesto hasta la factura.
+Práctica Evaluable 3-7 · Práctica: Odoo de principio a fin — usuarios, privilegios y venta completa (entrega en Git)
 
-**Alumno:** Francisco Javier Saravia Ogazón
-**Curso:** DAW / DAM — MEDAC Sevilla
-**Empresa:** Momo Madroña S.L. (ficticia) — ropa hecha con calma en Sevilla
+Francisco Javier Saravia Ogazón
+DAW / DAM — MEDAC Sevilla
+Momo Madroña 
 
-> Repositorio en construcción. Iré completando cada apartado según avance.
+> Repositorio en construcción, lo iré completando poco a poco
 
 ## Índice
 
