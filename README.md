@@ -7,6 +7,12 @@ Práctica de la Unidad 7 de Sistemas de Gestión Empresarial: poner en marcha Od
 
 > Repositorio en construcción. Iré completando cada apartado según avance.
 
+## Índice
+
+1. [Instalación de Odoo](instalacion/) — Odoo 19 Community con Docker
+   - [Diapositiva de la instalación (PDF)](instalacion/instalacion-odoo.pdf)
+   - [Errores encontrados y cómo los resolví](instalacion/errores-instalacion.md)
+
 ## Estructura
 
 ```
