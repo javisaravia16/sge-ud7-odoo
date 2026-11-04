@@ -15,6 +15,7 @@ Momo Madroña
    - [Errores encontrados y cómo los resolví](instalacion/errores-instalacion.md)
 2. [La empresa: Momo Madroña](empresa/ficha-empresa.md) — datos, imagen de marca y catálogo
 3. [Usuarios, grupos y permisos](usuarios/usuarios-grupos-permisos.md) — plantilla, grupos propios y pruebas
+4. [Proceso de venta](venta/proceso-venta.md) — del presupuesto S00001 a la factura pagada
 
 ## Estructura
 
