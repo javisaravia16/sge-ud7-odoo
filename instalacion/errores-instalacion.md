@@ -1,25 +1,53 @@
 # Errores de la instalación
 
-La instalación con Docker fue bastante limpia, pero me encontré con un par de cosas y, además, provoqué a propósito el problema típico del puerto 8069 ocupado para ver cómo se soluciona.
+La instalación no me salió a la primera. Estos son los problemas que tuve de verdad, en el orden en que me fueron saliendo, y cómo los arreglé.
 
-## Comprobaciones que hice antes de empezar
+## 1. La página de Odoo no cargaba
 
-- Que el ordenador tuviera la virtualización activada (Administrador de tareas → Rendimiento → CPU → «Virtualización: habilitada»).
-- Que WSL 2 estuviera instalado (`wsl --status`).
-- Que Docker Desktop arrancara y que `docker --version` respondiera.
-- Que nada estuviera usando ya el puerto 8069 (`netstat -ano | findstr :8069` no devolvía nada).
+**Lo que salía:** al abrir `localhost:8069` el navegador decía «No se puede acceder a este sitio» y `ERR_CONNECTION_REFUSED`.
 
-## Tabla de errores
+**Por qué pasaba:** el contenedor de Odoo estaba parado en Docker Desktop, así que no había nada funcionando en ese puerto.
 
-| # | Error o mensaje | Causa | Solución aplicada | Fuente consultada |
-|---|-----------------|-------|-------------------|-------------------|
-| 1 | Docker Desktop: *«WSL 2 installation is incomplete»* | Docker en Windows necesita WSL 2 y no estaba instalado del todo. | Abrí PowerShell como administrador, ejecuté `wsl --install`, reinicié el ordenador y volví a abrir Docker Desktop. | Documentación de Docker Desktop para Windows y de Microsoft sobre WSL |
-| 2 | *«Bind for 0.0.0.0:8069 failed: port is already allocated»* (provocado a propósito) | Levanté otro contenedor de Odoo que ya usaba el puerto 8069, así que el segundo no podía usarlo. | Con `docker ps` vi qué contenedor tenía el puerto, lo paré con `docker stop` y volví a lanzar `docker compose up -d`. Otra opción es cambiar el puerto en el compose (`"8070:8069"`) y entrar por `localhost:8070`. | Documentación de Docker Compose (apartado *ports*) |
-| 3 | Odoo en el navegador: *«Database connection failure»* nada más arrancar | Odoo arrancó antes de que PostgreSQL estuviera listo para recibir conexiones. | Esperé unos segundos y recargué la página. Para que no pase, el compose tiene `depends_on` y `restart: unless-stopped`, así que Odoo se reintenta solo. | Página de la imagen oficial de Odoo en Docker Hub |
-| 4 | *«Internal Server Error»* al recargar justo después de instalar Inventario | La página se recargó mientras Odoo todavía estaba terminando de instalar el módulo. | Esperé a que acabara, reinicié el contenedor con `docker compose restart odoo` y volví a entrar. Ya cargaba bien. | Foro de Odoo (preguntas sobre «Internal Server Error» tras instalar módulos) |
+**Cómo lo arreglé:** abrí Docker Desktop, fui a *Containers* y arranqué el contenedor de Odoo y el de PostgreSQL. Esperé unos segundos, recargué y ya salió Odoo.
+
+**Dónde lo miré:** en la ayuda de Docker Desktop sobre cómo arrancar contenedores.
+
+## 2. Entraba en Odoo pero solo veía «Mi cuenta»
+
+**Lo que salía:** podía entrar, pero no aparecían las aplicaciones ni los ajustes, solo una página de «Mi cuenta».
+
+**Por qué pasaba:** en vez de crear la base de datos me había **registrado** desde la web. Eso crea un usuario de tipo portal, que es como un cliente, no un administrador.
+
+**Cómo lo arreglé:** fui a `localhost:8069/web/database/manager` y creé una base de datos nueva y limpia llamada `momomadrona`. Al crearla se entra directamente como administrador.
+
+**Dónde lo miré:** en la documentación de Odoo sobre los tipos de usuario.
+
+## 3. «Access Denied» al crear la base de datos
+
+**Lo que salía:** «Database creation error: Access Denied».
+
+**Por qué pasaba:** para crear una base de datos Odoo pide la contraseña maestra, y la que yo ponía no era la buena. Fui a mirarla al archivo `/etc/odoo/odoo.conf`, pero allí está guardada cifrada (`admin_passwd = $pbkdf2-sha512$…`), así que no se puede leer.
+
+**Cómo lo arreglé:** cambié esa línea del archivo por una contraseña nueva, reinicié el contenedor de Odoo desde Docker Desktop y volví a crear la base de datos con la contraseña nueva.
+
+**Dónde lo miré:** en la documentación de Odoo sobre el gestor de bases de datos y en la página de la imagen de Odoo en Docker Hub.
+
+## 4. «Permission denied» al cambiar el archivo
+
+**Lo que salía:** al intentar cambiar la contraseña con `sed -i` en la terminal del contenedor salía `sed: couldn't open temporary file /etc/odoo/sed…: Permission denied`.
+
+**Por qué pasaba:** la terminal del contenedor entra con el usuario `odoo`. Ese usuario puede cambiar el archivo, pero no crear archivos nuevos en esa carpeta, y `sed -i` necesita crear uno temporal.
+
+**Cómo lo arreglé:** hice el cambio guardándolo primero en `/tmp` y luego copié el resultado encima del archivo original:
+
+```
+sed 's/^admin_passwd.*/admin_passwd = MiClaveNueva/' /etc/odoo/odoo.conf > /tmp/odoo.conf && cat /tmp/odoo.conf > /etc/odoo/odoo.conf
+```
+
+**Dónde lo miré:** en Stack Overflow, en preguntas sobre este mismo error de `sed`.
 
 ## Lo que he aprendido
 
-- Antes de culpar a Odoo hay que mirar los registros: `docker compose logs -f odoo` dice casi siempre qué está pasando.
-- El puerto 8069 solo lo puede usar un programa a la vez.
-- Como los datos se guardan en volúmenes, aunque pare o borre los contenedores no se pierde la empresa.
+- Si `localhost:8069` no carga, lo primero es mirar si el contenedor está encendido.
+- No es lo mismo registrarse en la web que crear la base de datos.
+- La contraseña maestra hay que apuntarla en un sitio seguro, porque luego Odoo la guarda cifrada y no se puede consultar.
