@@ -4,6 +4,7 @@ Práctica de la Unidad 7 de Sistemas de Gestión Empresarial: poner en marcha Od
 
 **Alumno:** Francisco Javier Saravia Ogazón
 **Curso:** DAW / DAM — MEDAC Sevilla
+**Empresa:** Momo Madroña S.L. (ficticia) — ropa hecha con calma en Sevilla
 
 > Repositorio en construcción. Iré completando cada apartado según avance.
 
@@ -12,6 +13,8 @@ Práctica de la Unidad 7 de Sistemas de Gestión Empresarial: poner en marcha Od
 1. [Instalación de Odoo](instalacion/) — Odoo 19 Community con Docker
    - [Diapositiva de la instalación (PDF)](instalacion/instalacion-odoo.pdf)
    - [Errores encontrados y cómo los resolví](instalacion/errores-instalacion.md)
+2. [La empresa: Momo Madroña](empresa/ficha-empresa.md) — datos, imagen de marca y catálogo
+3. [Usuarios, grupos y permisos](usuarios/usuarios-grupos-permisos.md) — plantilla, grupos propios y pruebas
 
 ## Estructura
 
