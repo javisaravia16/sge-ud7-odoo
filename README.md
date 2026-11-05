@@ -1,12 +1,10 @@
-# SGE UD7 Odoo
+# Práctica Evaluable 3-7 · Práctica: Odoo de principio a fin — usuarios, privilegios y venta completa (entrega en Git)
 
 Práctica Evaluable 3-7 · Práctica: Odoo de principio a fin — usuarios, privilegios y venta completa (entrega en Git)
-
 Francisco Javier Saravia Ogazón
-DAW / DAM — MEDAC Sevilla
 Momo Madroña 
 
-Empresa inventada: **Momo Madroña**, una marca de ropa de Sevilla. En esta práctica he instalado Odoo, he configurado la empresa, he creado a los trabajadores con sus permisos y he hecho una venta completa, desde el presupuesto hasta la factura cobrada.
+Empresa inventada: **Momo Madroña**, una marca de ropa de Sevilla. En esta práctica he instalado Odoo, he configurado la empresa, he creado a los trabajadores con sus permisos y he hecho una venta completa, desde el presupuesto hasta la factura cobrada
 
 ## Índice
 
